@@ -1,4 +1,4 @@
-import { Omit } from "./util/omit"
+import { OmitCompat } from "./util/omit-compat"
 import { SpraypaintBase, ModelRecord } from "./model"
 
 export interface IValidationError<T extends SpraypaintBase> {
@@ -20,9 +20,7 @@ export class ValidationError<T extends SpraypaintBase>
   rawPayload!: Record<string, any>
 
   constructor(options: IValidationError<T>) {
-    let key: keyof IValidationError<T>
-
-    for (key in options) {
+    for (const key in options) {
       this[key] = options[key]
     }
   }
@@ -30,7 +28,7 @@ export class ValidationError<T extends SpraypaintBase>
 
 export type ValidationErrors<T extends SpraypaintBase> = ErrorAttrs<
   T,
-  keyof (Omit<T, keyof SpraypaintBase>)
+  keyof (OmitCompat<T, keyof SpraypaintBase>)
 >
 export type ErrorAttrs<T extends SpraypaintBase, K extends keyof T> = {
   [P in K]?: IValidationError<T> | undefined
