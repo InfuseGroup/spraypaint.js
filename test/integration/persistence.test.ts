@@ -222,7 +222,7 @@ describe("Model persistence", () => {
         it("rejects the promise", async () => {
           try {
             await instance.save()
-          } catch (err) {
+          } catch (err: any) {
             expect(err.message).to.eq("Server Error")
           }
         })
@@ -477,7 +477,7 @@ describe("Model persistence", () => {
       it("rejects the promise", async () => {
         try {
           await instance.destroy()
-        } catch (err) {
+        } catch (err: any) {
           expect(err.message).to.eq("Server Error")
         }
       })

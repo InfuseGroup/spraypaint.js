@@ -518,7 +518,7 @@ describe("Errors without graphiti validation (1/2)", () => {
     let status = null
     try {
       await instance.save({ with: ["person_details"] })
-    } catch (e) {
+    } catch (e: any) {
       status = e.response.status
       json = await e.response.clone().json()
     }
@@ -593,7 +593,7 @@ describe("Errors without graphiti validation  (2/2)", () => {
     let status = null
     try {
       await instance.save({ with: ["person_details"] })
-    } catch (e) {
+    } catch (e: any) {
       status = e.response.status
       json = await e.response.clone().json()
     }
