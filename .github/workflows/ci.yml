@@ -13,6 +13,7 @@ jobs:
         node-version:
           - 12.x
           - 14.x
+          - 16.x
         ts-version:
           - 3.3.x
           - 3.4.x
