@@ -106,7 +106,11 @@ export class Request {
     try {
       response = await fetch(url, options)
     } catch (e) {
-      throw new ResponseError(null, e.message, e)
+      if (e instanceof Error) {
+        throw new ResponseError(null, e.message, e)
+      } else {
+        throw new ResponseError(null, "e was not an instance of Error", e)
+      }
     }
 
     await this._handleResponse(response, options)
@@ -162,16 +166,20 @@ export class Request {
 class RequestError extends Error {
   url: string
   options: RequestInit
-  originalError: Error
+  originalError: Error | unknown
 
   constructor(
     message: string,
     url: string,
     options: RequestInit,
-    originalError: Error
+    originalError: Error | unknown
   ) {
     super(message)
-    this.stack = originalError.stack
+
+    if (originalError instanceof Error) {
+      this.stack = originalError.stack
+    }
+
     this.url = url
     this.options = options
     this.originalError = originalError
@@ -180,12 +188,12 @@ class RequestError extends Error {
 
 export class ResponseError extends Error {
   response: Response | null
-  originalError: Error | undefined
+  originalError: Error | undefined | unknown
 
   constructor(
     response: Response | null,
     message?: string,
-    originalError?: Error
+    originalError?: Error | unknown
   ) {
     super(message || "Invalid Response")
     this.response = response
