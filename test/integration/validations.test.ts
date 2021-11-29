@@ -3,6 +3,7 @@ import { Author, Book, Genre, Person, PersonDetail } from "../fixtures"
 import { tempId } from "../../src/util/temp-id"
 import { SpraypaintBase, ModelRecord } from "../../src/model"
 import { ValidationError } from "../../src/validation-errors"
+import { ResponseError } from "../../src/request"
 
 const resetMocks = (mockErrors: any, status: number = 422) => {
   fetchMock.restore()
