@@ -32,7 +32,7 @@ import { JsonapiTypeRegistry } from "./jsonapi-type-registry"
 import { camelize, underscore, dasherize } from "inflected"
 import { ILogger, logger as defaultLogger } from "./logger"
 import { MiddlewareStack, BeforeFilter, AfterFilter } from "./middleware-stack"
-import { Omit } from "./util/omit"
+import { OmitCompat } from "./util/omit-compat"
 import { EventBus } from "./event-bus"
 
 import {
@@ -79,13 +79,13 @@ export type ModelAttrChanges<T> = { [P in keyof T]?: T[P][] } &
   Partial<Record<ModelIdFields, string[]>>
 
 export type ModelRecord<T extends SpraypaintBase> = ModelAttrs<
-  keyof (Omit<T, keyof SpraypaintBase>),
+  keyof (OmitCompat<T, keyof SpraypaintBase>),
   T
 >
 
 export type ModelAttributeChangeSet<
   T extends SpraypaintBase
-> = ModelAttrChanges<Omit<T, keyof SpraypaintBase>>
+> = ModelAttrChanges<OmitCompat<T, keyof SpraypaintBase>>
 
 export interface SaveOptions<T extends SpraypaintBase> {
   with?: IncludeScope
@@ -147,7 +147,7 @@ export const applyModelConfig = <T extends typeof SpraypaintBase>(
 
   for (k in config) {
     if (config.hasOwnProperty(k)) {
-      ModelClass[k] = config[k]
+      ;(ModelClass as Record<typeof k, unknown>)[k] = config[k]
     }
   }
 
@@ -424,7 +424,7 @@ export class SpraypaintBase {
   @nonenumerable private _originalLinks!: ModelRecord<this>
   @nonenumerable private __meta__: any
   @nonenumerable private _metaDirty: boolean = false
-  @nonenumerable private _errors: ValidationErrors<this> = {}
+  @nonenumerable private _errors: ValidationErrors<SpraypaintBase> = {}
 
   constructor(attrs?: Record<string, any>) {
     this._initializeAttributes()
@@ -693,11 +693,12 @@ export class SpraypaintBase {
     }
   }
 
-  get errors(): ValidationErrors<this> {
+  // NOTE: If <this> is used, causes TS error "Construct signature return types are incompatible"
+  get errors(): ValidationErrors<SpraypaintBase> {
     return this._errors
   }
 
-  set errors(errs: ValidationErrors<this>) {
+  set errors(errs: ValidationErrors<SpraypaintBase>) {
     this._errors = errs
   }
 
