@@ -3,6 +3,7 @@ import { Author, Book, Genre, Person, PersonDetail } from "../fixtures"
 import { tempId } from "../../src/util/temp-id"
 import { SpraypaintBase, ModelRecord } from "../../src/model"
 import { ValidationError } from "../../src/validation-errors"
+import { ResponseError } from "../../src/request"
 
 const resetMocks = (mockErrors: any, status: number = 422) => {
   fetchMock.restore()
@@ -518,8 +519,8 @@ describe("Errors without graphiti validation (1/2)", () => {
     try {
       await instance.save({ with: ["person_details"] })
     } catch (e) {
-      status = e.response.status
-      json = await e.response.clone().json()
+      status = (e as any).response.status
+      json = await (e as any).response.clone().json()
     }
     expect(status).to.eq(422)
     expect(instance.isPersisted).to.eq(false)
@@ -593,8 +594,8 @@ describe("Errors without graphiti validation  (2/2)", () => {
     try {
       await instance.save({ with: ["person_details"] })
     } catch (e) {
-      status = e.response.status
-      json = await e.response.clone().json()
+      status = (e as any).response.status
+      json = await (e as any).response.clone().json()
     }
 
     expect(status).to.eq(400)

@@ -91,7 +91,7 @@ describe("Lookup additional data during persistence operation", () => {
           await person.save({ returnScope })
           expect(true).to.eq(false)
         } catch (err) {
-          expect(err.message).to.match(
+          expect((err as any).message).to.match(
             /returnScope must be a scope of type Scope<Person>/
           )
         }
