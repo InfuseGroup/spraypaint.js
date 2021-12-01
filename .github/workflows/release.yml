@@ -28,8 +28,10 @@ jobs:
       - run: yarn build
       - name: Release to git release branch
         run: |
-          git config --local user.email "$(git log --format='%ae' HEAD^!)"
-          git config --local user.name "$(git log --format='%an' HEAD^!)" (via Github Action)
+          COMMIT_EMAIL="$(git log --format='%ae' HEAD^ | tail -n1)"
+          COMMIT_USER_NAME="$(git log --format='%an' HEAD^ | tail -n1)"
+          git config --local user.email "$COMMIT_EMAIL"
+          git config --local user.name "$COMMIT_USER_NAME (via Github Action)"
           git remote add github "https://$GITHUB_ACTOR:$GITHUB_TOKEN@github.com/$GITHUB_REPOSITORY.git"
           git pull github ${GITHUB_REF} --ff-only
           cat .gitignore_release > .gitignore
