@@ -4,8 +4,11 @@
 # But not these files...
 !.gitignore
 !dist
+!dist/**
 !lib-esm
+!lib-esm/**
 !lib
+!lib/**
 !banner.js
 !CHANGELOG.md
 !LICENCE
