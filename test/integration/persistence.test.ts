@@ -223,7 +223,7 @@ describe("Model persistence", () => {
           try {
             await instance.save()
           } catch (err) {
-            expect(err.message).to.eq("Server Error")
+            expect((err as any).message).to.eq("Server Error")
           }
         })
       })
@@ -478,7 +478,7 @@ describe("Model persistence", () => {
         try {
           await instance.destroy()
         } catch (err) {
-          expect(err.message).to.eq("Server Error")
+          expect((err as any).message).to.eq("Server Error")
         }
       })
     })

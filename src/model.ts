@@ -288,7 +288,7 @@ export class SpraypaintBase {
     return false
   }
 
-  static get baseClass() {
+  static get baseClass(): typeof SpraypaintBase | undefined {
     let current = this.currentClass
 
     while (current) {
