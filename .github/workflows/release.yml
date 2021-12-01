@@ -32,8 +32,7 @@ jobs:
           git config --local user.name "$(git log --format='%an' HEAD^!)" (via Github Action)
           git remote add github "https://$GITHUB_ACTOR:$GITHUB_TOKEN@github.com/$GITHUB_REPOSITORY.git"
           git pull github ${GITHUB_REF} --ff-only
-          rm .gitignore
-          mv .gitignore_release .gitignore
+          cat .gitignore_release > .gitignore
           git rm --cached `git ls-files -i -c --exclude-from=.gitignore`
           git add --all
           git commit -m "Release committed from Github Actions"
