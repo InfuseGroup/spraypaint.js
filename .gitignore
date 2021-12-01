@@ -1,13 +1,16 @@
-.vscode
-.DS_Store
-node_modules
+# Ignore everything
+*
 
-_bundles
-yarn.lock
-yarn-error.log
-build/
-test-old/
-dist/
-coverage/
-lib/
-lib-esm/
+# But not these files...
+!.gitignore
+!dist
+!dist/**
+!lib-esm
+!lib-esm/**
+!lib
+!lib/**
+!banner.js
+!CHANGELOG.md
+!LICENCE
+!package.json
+!README.md
