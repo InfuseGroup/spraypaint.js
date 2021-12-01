@@ -1,0 +1,13 @@
+# Ignore everything
+*
+
+# But not these files...
+!.gitignore
+!dist
+!lib-esm
+!lib
+!banner.js
+!CHANGELOG.md
+!LICENCE
+!package.json
+!README.md
