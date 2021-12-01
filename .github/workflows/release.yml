@@ -35,6 +35,6 @@ jobs:
           rm .gitignore
           mv .gitignore_release .gitignore
           git rm --cached `git ls-files -i -c --exclude-from=.gitignore`
-          git add *
+          git add --all
           git commit -m "Release committed from Github Actions"
           git push github HEAD:release
