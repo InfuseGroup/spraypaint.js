@@ -50,5 +50,4 @@ jobs:
 
           git add --all
           git commit -m "Release commit from Github Actions"
-          git remote add github "https://$GITHUB_ACTOR:$GITHUB_TOKEN@github.com/$GITHUB_REPOSITORY.git"
-          git push github release:release
+          git push
