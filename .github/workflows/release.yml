@@ -28,7 +28,7 @@ jobs:
       - run: yarn build
       - name: Create temp, copy release files, checkout release branch, remove all existing files, copy files from temporary directory, push
         run: |
-          git config --local user.email "${{ github.event.pusher.email }}""
+          git config --local user.email "${{ github.event.pusher.email }}"
           git config --local user.name "${{ github.event.pusher.name }}" (via Github Action)"
 
           TEMP_DIR=$(mktemp -d)
