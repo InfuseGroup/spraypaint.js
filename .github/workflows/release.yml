@@ -19,36 +19,40 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
+      - name: Checkout build
+        uses: actions/checkout@v3
+        with:
+          path: build
+      - name: Checkout release
+        uses: actions/checkout@v3
+        with:
+          ref: release
+          path: release
       - uses: actions/setup-node@v1
         with:
           node-version: 14
           registry-url: https://registry.npmjs.org/
       - run: yarn install
+        working-directory: build
       - run: yarn build
-      - name: Create temp, copy release files, checkout release branch, remove all existing files, copy files from temporary directory, push
+        working-directory: build
+      - name: Remove existing, then copy and commit build files to release branch
+        working-directory: release
         run: |
-          git config --local user.email "${{ github.event.pusher.email }}"
-          git config --local user.name "${{ github.event.pusher.name }}" (via Github Action)"
-
-          TEMP_DIR=$(mktemp -d)
-
-          cp -r dist $TEMP_DIR/
-          cp -r lib-esm $TEMP_DIR/
-          cp -r lib $TEMP_DIR/
-          cp CHANGELOG.md $TEMP_DIR/
-          cp LICENCE $TEMP_DIR/
-          cp package.json $TEMP_DIR/
-          cp README.md $TEMP_DIR/
-
-          git checkout release
-          git pull
+          git config --global user.name "${GITHUB_ACTOR}"
+          git config --global user.email "${GITHUB_ACTOR}@users.noreply.github.com"
 
           git rm -rf .
           git clean -fxd
-          cp -r $TEMP_DIR/* ./
+
+          cp -r $GITHUB_WORKSPACE/build/dist .
+          cp -r $GITHUB_WORKSPACE/build/lib-esm .
+          cp -r $GITHUB_WORKSPACE/build/lib .
+          cp $GITHUB_WORKSPACE/build/CHANGELOG.md .
+          cp $GITHUB_WORKSPACE/build/LICENSE .
+          cp $GITHUB_WORKSPACE/build/package.json .
+          cp $GITHUB_WORKSPACE/build/README.md .
 
           git add --all
-          git commit -m "Release committed from Github Actions"
-          git remote add github "https://$GITHUB_ACTOR:$GITHUB_TOKEN@github.com/$GITHUB_REPOSITORY.git"
-          git push github release
+          git commit -m "Release commit from Github Actions"
+          git push
