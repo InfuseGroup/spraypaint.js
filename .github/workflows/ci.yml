@@ -15,19 +15,19 @@ jobs:
           - 14.x
           - 16.x
         ts-version:
-          # - 3.3.x
-          - 3.4.x
-          - 3.5.x
-          - 3.6.x
-          - 3.7.x
-          - 3.8.x
-          - 3.9.x
-          - 4.0.x
-          - 4.1.x
-          - 4.2.x
-          - 4.3.x
-          - 4.4.x
-          - 4.5.x
+          # - '3.3'
+          - '3.4'
+          - '3.5'
+          - '3.6'
+          - '3.7'
+          - '3.8'
+          - '3.9'
+          - '4.0'
+          - '4.1'
+          - '4.2'
+          - '4.3'
+          - '4.4'
+          - '4.5'
 
     steps:
       - uses: actions/checkout@v2
@@ -37,6 +37,8 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - name: Use TypeScript ${{ matrix.ts-version }}
         run: yarn add --dev typescript@${{ matrix.ts-version }}
+      - name: Use specific TS chai types for ts${{ matrix.ts-version }}
+        run: yarn add --dev @types/chai@ts${{ matrix.ts-version }}
       - name: Install
         run: yarn install
       - name: Run Lint
