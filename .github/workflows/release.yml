@@ -36,11 +36,12 @@ jobs:
         working-directory: build
       - run: yarn build
         working-directory: build
-      - name: Create temp, copy release files, checkout release branch, remove all existing files, copy files from temporary directory, push
+      - name: Remove existing, then copy and commit build files to release branch
         working-directory: release
         run: |
           git config --global user.name "${GITHUB_ACTOR}"
           git config --global user.email "${GITHUB_ACTOR}@users.noreply.github.com"
+
           git rm -rf .
           git clean -fxd
 
