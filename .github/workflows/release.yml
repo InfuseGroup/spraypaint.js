@@ -19,34 +19,39 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - name: Checkout build
+        uses: actions/checkout@v3
+        with:
+          path: build
+      - name: Checkout release
+        uses: actions/checkout@v3
+        with:
+          ref: release
+          path: release
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
         with:
           node-version: 14
           registry-url: https://registry.npmjs.org/
       - run: yarn install
+        working-directory: $GITHUB_WORKSPACE/build
       - run: yarn build
+        working-directory: $GITHUB_WORKSPACE/build
       - name: Create temp, copy release files, checkout release branch, remove all existing files, copy files from temporary directory, push
+        working-directory: $GITHUB_WORKSPACE/release
         run: |
           git config --global user.name "${GITHUB_ACTOR}"
           git config --global user.email "${GITHUB_ACTOR}@users.noreply.github.com"
-
-          TEMP_DIR=$(mktemp -d)
-
-          cp -r dist $TEMP_DIR/
-          cp -r lib-esm $TEMP_DIR/
-          cp -r lib $TEMP_DIR/
-          cp CHANGELOG.md $TEMP_DIR/
-          cp LICENSE $TEMP_DIR/
-          cp package.json $TEMP_DIR/
-          cp README.md $TEMP_DIR/
-
-          git checkout -b release origin/release
-          git pull
-
           git rm -rf .
           git clean -fxd
-          cp -r $TEMP_DIR/* ./
+
+          cp -r $GITHUB_WORKSPACE/build/dist .
+          cp -r $GITHUB_WORKSPACE/build/lib-esm .
+          cp -r $GITHUB_WORKSPACE/build/lib .
+          cp $GITHUB_WORKSPACE/build/CHANGELOG.md .
+          cp $GITHUB_WORKSPACE/build/LICENSE .
+          cp $GITHUB_WORKSPACE/build/package.json .
+          cp $GITHUB_WORKSPACE/build/README.md .
 
           git add --all
           git commit -m "Release commit from Github Actions"
