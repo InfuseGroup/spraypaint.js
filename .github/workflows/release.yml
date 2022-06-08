@@ -33,11 +33,11 @@ jobs:
           node-version: 14
           registry-url: https://registry.npmjs.org/
       - run: yarn install
-        working-directory: $GITHUB_WORKSPACE/build
+        working-directory: build
       - run: yarn build
-        working-directory: $GITHUB_WORKSPACE/build
+        working-directory: build
       - name: Create temp, copy release files, checkout release branch, remove all existing files, copy files from temporary directory, push
-        working-directory: $GITHUB_WORKSPACE/release
+        working-directory: release
         run: |
           git config --global user.name "${GITHUB_ACTOR}"
           git config --global user.email "${GITHUB_ACTOR}@users.noreply.github.com"
