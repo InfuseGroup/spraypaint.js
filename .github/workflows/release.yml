@@ -37,7 +37,7 @@ jobs:
           cp -r lib-esm $TEMP_DIR/
           cp -r lib $TEMP_DIR/
           cp CHANGELOG.md $TEMP_DIR/
-          cp LICENCE $TEMP_DIR/
+          cp LICENSE $TEMP_DIR/
           cp package.json $TEMP_DIR/
           cp README.md $TEMP_DIR/
 
