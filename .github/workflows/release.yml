@@ -31,7 +31,7 @@ jobs:
           git config --local user.email "${{ github.event.pusher.email }}""
           git config --local user.name "${{ github.event.pusher.name }}" (via Github Action)"
 
-          TEMP_DIR=$(mktemp -d)"
+          TEMP_DIR=$(mktemp -d)
 
           cp -r dist $TEMP_DIR/
           cp -r lib-esm $TEMP_DIR/
