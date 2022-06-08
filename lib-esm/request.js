@@ -114,7 +114,7 @@ var Request = /** @class */ (function () {
                         isEmptyResponse = [202, 204].indexOf(response.status) > -1;
                         if (isEmptyResponse)
                             return [2 /*return*/];
-                        throw new ResponseError(response, "invalid json", e_3);
+                        throw new ResponseError(response, "SP" + response.status + " - Invalid JSON", e_3);
                     case 4:
                         _a.trys.push([4, 6, , 7]);
                         return [4 /*yield*/, this.middleware.afterFetch(response, json)];
@@ -127,16 +127,22 @@ var Request = /** @class */ (function () {
                         throw new ResponseError(response, "afterFetch failed; review middleware.afterFetch stack", e_4);
                     case 7:
                         if (response.status >= 500) {
-                            throw new ResponseError(response, "Server Error");
+                            throw new ResponseError(response, "SP" + response.status + " - Server error");
                             // Allow 422 since we specially handle validation errors
                         }
                         else if (response.status !== 422 && json.data === undefined) {
                             if (response.status === 404) {
-                                throw new ResponseError(response, "record not found");
+                                throw new ResponseError(response, "SP" + response.status + " - Record not found");
+                            }
+                            else if (response.status === 403) {
+                                throw new ResponseError(response, "SP" + response.status + " - Forbidden");
+                            }
+                            else if (response.status === 401) {
+                                throw new ResponseError(response, "SP" + response.status + " - Unauthorized");
                             }
                             else {
                                 // Bad JSON, for instance an errors payload
-                                throw new ResponseError(response, "invalid json");
+                                throw new ResponseError(response, "SP" + response.status + " - Unknown status with no JSON data");
                             }
                         }
                         ;
