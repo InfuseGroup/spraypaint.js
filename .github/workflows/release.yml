@@ -26,16 +26,29 @@ jobs:
           registry-url: https://registry.npmjs.org/
       - run: yarn install
       - run: yarn build
-      - name: Release to git release branch
+      - name: Create temp, copy release files, checkout release branch, remove all existing files, copy files from temporary directory, push
         run: |
-          COMMIT_EMAIL="$(git log --format='%ae' HEAD^ | tail -n1)"
-          COMMIT_USER_NAME="$(git log --format='%an' HEAD^ | tail -n1)"
-          git config --local user.email "$COMMIT_EMAIL"
-          git config --local user.name "$COMMIT_USER_NAME (via Github Action)"
-          git remote add github "https://$GITHUB_ACTOR:$GITHUB_TOKEN@github.com/$GITHUB_REPOSITORY.git"
-          git pull github ${GITHUB_REF} --ff-only
-          cat .gitignore_release > .gitignore
-          git rm --cached `git ls-files -i -c --exclude-from=.gitignore`
+          git config --local user.email "${{ github.event.pusher.email }}""
+          git config --local user.name "${{ github.event.pusher.name }}" (via Github Action)"
+
+          TEMP_DIR=$(mktemp -d)
+
+          cp -r dist $TEMP_DIR/
+          cp -r lib-esm $TEMP_DIR/
+          cp -r lib $TEMP_DIR/
+          cp CHANGELOG.md $TEMP_DIR/
+          cp LICENCE $TEMP_DIR/
+          cp package.json $TEMP_DIR/
+          cp README.md $TEMP_DIR/
+
+          git checkout release
+          git pull
+
+          git rm -rf .
+          git clean -fxd
+          cp -r $TEMP_DIR/* ./
+
           git add --all
           git commit -m "Release committed from Github Actions"
-          git push github HEAD:release
+          git remote add github "https://$GITHUB_ACTOR:$GITHUB_TOKEN@github.com/$GITHUB_REPOSITORY.git"
+          git push github release
