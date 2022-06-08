@@ -256,7 +256,7 @@ describe("fetch middleware", () => {
             expect("dont get here!").to.eq(true)
           })
           .catch(e => {
-            expect(e.message).to.eq("record not found")
+            expect(e.message).to.eq("SP404 - Record not found")
             expect(e.response.status).to.eq(404)
           })
       })
