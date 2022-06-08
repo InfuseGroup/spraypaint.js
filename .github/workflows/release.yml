@@ -20,6 +20,8 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
+      - name: Echo github object to see what we have to work with
+        run: echo ${{ toJson(github) }}
       - uses: actions/setup-node@v1
         with:
           node-version: 14
