@@ -35,10 +35,8 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-      - name: Use TypeScript ${{ matrix.ts-version }}
-        run: yarn add --dev typescript@${{ matrix.ts-version }}
-      - name: Use specific TS chai types for ts${{ matrix.ts-version }}
-        run: yarn add --dev @types/chai@ts${{ matrix.ts-version }}
+      - name: Use TypeScript ${{ matrix.ts-version }} and version specific dependencies
+        run: yarn add --dev typescript@${{ matrix.ts-version }} @types/chai@ts${{ matrix.ts-version }}
       - name: Install
         run: yarn install
       - name: Run Lint
