@@ -44,7 +44,8 @@ jobs:
           git checkout release
           git pull
 
-          rm -rf $(ls -A)
+          git rm -rf .
+          git clean -fxd
           cp -r $TEMP_DIR/* ./
 
           git add --all
