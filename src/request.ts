@@ -133,7 +133,11 @@ export class Request {
     } catch (e) {
       const isEmptyResponse = [202, 204].indexOf(response.status) > -1
       if (isEmptyResponse) return
-      throw new ResponseError(response, "invalid json", e)
+      throw new ResponseError(
+        response,
+        `SP${response.status} - Invalid JSON`,
+        e
+      )
     }
 
     try {
@@ -148,14 +152,20 @@ export class Request {
     }
 
     if (response.status >= 500) {
-      throw new ResponseError(response, "Server Error")
+      throw new ResponseError(response, `SP${response.status} - Server error`)
       // Allow 422 since we specially handle validation errors
     } else if (response.status !== 422 && json.data === undefined) {
       if (response.status === 404) {
-        throw new ResponseError(response, "record not found")
+        throw new ResponseError(
+          response,
+          `SP${response.status} - Record not found`
+        )
       } else {
         // Bad JSON, for instance an errors payload
-        throw new ResponseError(response, "invalid json")
+        throw new ResponseError(
+          response,
+          `SP${response.status} - Unknown status with no JSON data`
+        )
       }
     }
 
