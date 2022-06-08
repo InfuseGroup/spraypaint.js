@@ -160,6 +160,10 @@ export class Request {
           response,
           `SP${response.status} - Record not found`
         )
+      } else if (response.status === 403) {
+        throw new ResponseError(response, `SP${response.status} - Forbidden`)
+      } else if (response.status === 401) {
+        throw new ResponseError(response, `SP${response.status} - Unauthorized`)
       } else {
         // Bad JSON, for instance an errors payload
         throw new ResponseError(
